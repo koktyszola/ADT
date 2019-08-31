@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class ArrayList2x implements IList {
 
-    private final long[] holder;
+    private long[] holder;
     private int size = 0;
     private final int arraySizeMultipler = 2;
 
@@ -12,10 +12,9 @@ public class ArrayList2x implements IList {
         holder = new long[arraySizeMultipler];
     }
 
-    // to do
     @Override
     public boolean isEmpty() {
-        return false;
+        return size ==0 ? true : false;
     }
 
     @Override
@@ -25,18 +24,25 @@ public class ArrayList2x implements IList {
 
     @Override
     public long get(int index) {
-        return 0;
+        checkBounds(index);
+        return holder[index];
+
     }
 
-    //to do
     @Override
     public void set(int index, long value) {
+        checkBounds(index);
+        holder[index] = value;
+
 
     }
 
-    //to do
     @Override
     public void remove(int index) {
+        checkBounds(index);
+        for (int i = index; i< size-1; i++)
+            holder[i] = holder[i+1];
+        size--;
 
     }
 
@@ -50,9 +56,12 @@ public class ArrayList2x implements IList {
         return -1;
     }
 
-    //to do - increment size of table
-    @Override            //   0             2           size= 1
+
+    @Override
     public void add(int index, long value) {
+        checkInsertBounds(index);
+        if(holder.length == size)
+            incrementHolderLenght();
         for (int i = size; i > index; i--) {
             holder[i] = holder[i - 1];
         }
@@ -60,9 +69,18 @@ public class ArrayList2x implements IList {
         size++;
     }
 
-    //to do - increment size of physical table
+    private void incrementHolderLenght() {
+        int newHolderSize = holder.length * arraySizeMultipler;
+        long[] newHolder = new long[newHolderSize];
+        for(int i  = 0; i <size; i++)
+            newHolder[i] = holder[i];
+        holder = newHolder;
+    }
+
     @Override
     public void add(long value) {
+        if(holder.length == size)
+            incrementHolderLenght();
         holder[size] = value;
         size++;
     }
@@ -72,6 +90,18 @@ public class ArrayList2x implements IList {
     public long[] getHolderView() {
         return Arrays.copyOfRange(holder, 0, size);
 
+    }
+    private void checkBounds(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(index);
+        }
+    }
+
+    //when inserting value you can add it between other or exactly at the end which is index = size
+    private void checkInsertBounds(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException(index);
+        }
     }
 
 }
