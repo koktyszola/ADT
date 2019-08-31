@@ -1,6 +1,6 @@
 package pl.sda.List;
 
-public class MainList<T> {
+public class MainList {
 
     public void main(String[] args) {
         IList list = new LinkedList();
@@ -8,9 +8,9 @@ public class MainList<T> {
         list.add(2);
         list.add(3);
 
-       T[] tab = (T[]) list.getHolderView();
+       Object[] tab = list.getHolderView();
 
-        for (T val:tab)
+        for (Object val:tab)
             System.out.print(val + " ");
     }
 }
